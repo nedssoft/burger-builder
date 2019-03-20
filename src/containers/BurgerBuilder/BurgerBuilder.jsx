@@ -19,12 +19,7 @@ class BurgerBuilder extends Component {
     super();
   }
   state = {
-    ingredients: {
-      salad: 0,
-      meat: 0,
-      bacon: 0,
-      cheese: 0
-    },
+    ingredients: null,
     totalPrice: 4,
     showCheckout: false,
     showPrice: false,
@@ -35,6 +30,7 @@ class BurgerBuilder extends Component {
     .then(res => {
       this.setState({ingredients: res.data});
     })
+    .catch(err => console.log(err))
   }
   addIngredient = (type) => {
     const { ingredients, totalPrice } = this.state;
@@ -66,30 +62,41 @@ class BurgerBuilder extends Component {
     this.setState({showCheckout: false})
   }
   completePurchaseHandler = () => {
-    this.setState({isLoading: true});
+    const { ingredients } = this.state;
+    const { history } = this.props;
+    // this.setState({isLoading: true});
 
-    const { ingredients, totalPrice } = this.state;
-    const order = {
-      ingredients: ingredients,
-      price: totalPrice,
-      customer: {
-        name: 'chinedu',
-        email: 'ned@gmail.com',
-        phone: '07035052689'
-      }
+    // const { ingredients, totalPrice} = this.state;
+    // const { history } = this.props;
+    // const order = {
+    //   ingredients: ingredients,
+    //   price: totalPrice,
+    //   customer: {
+    //     name: 'chinedu',
+    //     email: 'ned@gmail.com',
+    //     phone: '07035052689'
+    //   }
+    // }
+    // axios.post('/orders.json', order)
+    // .then(res => {
+    //   if (res.data.name) {
+    //     this.setState({showCheckout: false, isLoading: false});
+    //     alert('order created successfully');
+    //   }
+    // })
+    // .catch(err => {
+    //   this.setState({ isLoading: false, showCheckout: false});
+
+    // });
+    const queryParams = [];
+    for (let i in ingredients) {
+      queryParams.push(`${encodeURIComponent(i)}=${encodeURIComponent(ingredients[i])}`);
     }
-    axios.post('/orders.json', order)
-    .then(res => {
-      if (res.data.name) {
-        this.setState({showCheckout: false, isLoading: false});
-        alert('order created successfully');
-      }
-    })
-    .catch(err => {
-      this.setState({ isLoading: false, showCheckout: false});
-
+    const queryString = queryParams.join('&');
+    history.push({
+      pathname: '/checkout',
+      search: '?' + queryString
     });
-
   }
   render() {
     const { ingredients, totalPrice, showCheckout, showPrice, isLoading } = this.state;
@@ -97,24 +104,13 @@ class BurgerBuilder extends Component {
     for (let key in disabledInfo) {
       disabledInfo[key] = disabledInfo[key] <= 0;
     }
-    let orderSummary = (
-      <OrderSummary 
-        ingredients={ingredients} 
-        cancel={this.closeModal} 
-        price={totalPrice}
-        checkout={showPrice}
-        proceed={this.completePurchaseHandler}
-      />
-    );
-
-    if (isLoading) {
-      orderSummary = <Spinner />
-    }
-
+    
+    let orderSummary;
     let burger = <Spinner />
     if (ingredients) {
       burger = (
         <Aux>
+          <Burger ingredients={ingredients} />
           <BuilControls 
             ingredientAdded={this.addIngredient} 
             ingredientRemoved={this.removeIngredient} 
@@ -123,14 +119,26 @@ class BurgerBuilder extends Component {
             checkout={this.checkoutHandler}
           />
         </Aux>
-      )
+      ),
+      orderSummary = (
+        <OrderSummary 
+          ingredients={ingredients} 
+          cancel={this.closeModal} 
+          price={totalPrice}
+          checkout={showPrice}
+          proceed={this.completePurchaseHandler}
+        />
+      );
     }
+    if (isLoading) {
+      orderSummary = <Spinner />
+    }
+
     return (
       <Aux>
         <Modal show={showCheckout} closeModal={this.closeModal}>
           {orderSummary}
         </Modal>
-        <Burger ingredients={ingredients} />
         { burger}
       </Aux>
     );
