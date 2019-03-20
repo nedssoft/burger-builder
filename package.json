@@ -29,15 +29,16 @@
   },
   "dependencies": {
     "autoprefixer": "^9.4.9",
+    "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "css-loader": "^2.1.0",
     "file-loader": "^3.0.1",
     "postcss-loader": "^3.0.0",
-    "style-loader": "^0.23.1",
-    "url-loader": "^1.1.2",
-    "webpack-combine-loaders": "^2.0.4",
     "prop-types": "^15.7.2",
     "react": "^16.8.3",
-    "react-dom": "^16.8.3"
+    "react-dom": "^16.8.3",
+    "style-loader": "^0.23.1",
+    "url-loader": "^1.1.2",
+    "webpack-combine-loaders": "^2.0.4"
   }
 }

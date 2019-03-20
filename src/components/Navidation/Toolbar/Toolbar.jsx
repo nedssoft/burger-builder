@@ -4,8 +4,7 @@ import Logo from '../../Logo/Logo';
 import NavigationItems from '../NavigationItems/NavigationItems';
 import DrawerToggle from '../SideDrawer/DrawerToggle/DrawerToggle'
 
-const Toolbar = ( props ) => {
-  const { toggleMenu } = props;
+function Toolbar ({toggleMenu }) {
   return (
     <header className={classes.Toolbar}>
       <DrawerToggle toggleMenu={toggleMenu} />

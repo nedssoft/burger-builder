@@ -5,8 +5,7 @@ import classes from './SideDrawer.css'
 import Backdrop from '../../UI/Backdrop/Backdrop'
 import Aux from '../../../hoc/Aux'
 
-const SideDrawer = ( props ) => {
-  const { open, closed } = props;
+function SideDrawer({ open, closed }) {
   const attchedClasses = open ? [classes.SideDrawer, classes.Open] : [classes.SideDrawer, classes.Close];
   return (
     <Aux>
