@@ -3,13 +3,14 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 
-import { createStore } from 'redux'
+import { createStore, compose, applyMiddleware } from 'redux'
 import App from './App';
 import './App.css';
 import reducer from './store/reducer'
 
-const store = createStore(reducer)
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__ || compose
 
+const store = createStore(reducer)
 const app = (
   <Provider store={store}>
     <BrowserRouter>

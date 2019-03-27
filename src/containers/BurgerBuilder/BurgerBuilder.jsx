@@ -26,11 +26,11 @@ class BurgerBuilder extends Component {
     isLoading: false,
   }
   componentDidMount() {
-    axios.get('/ingredients.json')
-    .then(res => {
-      this.setState({ingredients: res.data});
-    })
-    .catch(err => console.log(err))
+    // axios.get('/ingredients.json')
+    // .then(res => {
+    //   this.setState({ingredients: res.data});
+    // })
+    // .catch(err => console.log(err))
   }
   addIngredient = (type) => {
     const { ingredients, totalPrice } = this.state;
@@ -62,23 +62,22 @@ class BurgerBuilder extends Component {
     this.setState({showCheckout: false})
   }
   completePurchaseHandler = () => {
-    const { ingredients, totalPrice } = this.state;
-    const { history } = this.props;
-    // this.setState({isLoading: true});
-
-    // const { ingredients, totalPrice} = this.state;
-    // const { history } = this.props;
    
-    const queryParams = [];
-    for (let i in ingredients) {
-      queryParams.push(`${encodeURIComponent(i)}=${encodeURIComponent(ingredients[i])}`);
-    }
-    queryParams.push(`price=${totalPrice}`)
-    const queryString = queryParams.join('&');
-    history.push({
-      pathname: '/checkout',
-      search: '?' + queryString
-    });
+    const { history } = this.props;
+  
+    history.push('/checkout')
+    
+  }
+  updatePurchaseState = (ingredients) => {
+    const sum = Object.keys(ingredients).map(igKey => {
+      return ingredients[igKey]
+    })
+    .reduce((sum, el) =>{
+     return sum + el
+    }, 0);
+   
+
+    return sum > 0;
   }
   render() {
     const { showCheckout, showPrice, isLoading } = this.state;
@@ -100,6 +99,7 @@ class BurgerBuilder extends Component {
             disabled={disabledInfo}
             totalPrice={price}
             checkout={this.checkoutHandler}
+            purchasable={this.updatePurchaseState(ingredients)}
           />
         </Aux>
       ),
