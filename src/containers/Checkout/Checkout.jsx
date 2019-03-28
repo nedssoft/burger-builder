@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import Aux from '../../hoc/Aux'
 import ContactData from './ContactData/ContactData'
+
 
 class Checkout extends Component {
  
@@ -20,32 +21,34 @@ class Checkout extends Component {
   render() {
     const { ingredients } = this.props;
     const { match} = this.props;
-    let  checkoutSummary = <Spinner />
+    let  checkoutSummary = <Redirect to="/" />
 
     if (ingredients) {
+      const orderPurchased = this.props.purchased ? <Redirect to="/" /> : null
       checkoutSummary = (
         <Aux>
+          { orderPurchased}
           <CheckoutSummary 
             ingredients={ingredients}
             cancelCheckout={this.cancelCheckoutHandler}
             continueCheckout={this.continueCheckoutHandler}
           />
+          <Route path={match.path + '/contact-data'} component={ContactData} />
         </Aux>
       )
     }
     return (
       <div>
         {checkoutSummary}
-        <Route path={match.path + '/contact-data'} component={ContactData} />
-
       </div>
     )
   }
 }
 const mapStateToProps = state => {
   return {
-    ingredients: state.ingredients,
-    price: state.totalPrice
+    ingredients: state.burgerBuilderReducer.ingredients,
+    price: state.burgerBuilderReducer.totalPrice,
+    purchased: state.orderReducer.purchased
   }
 }
 export default connect(mapStateToProps)(Checkout)

@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Button from '../../../components/UI/Button/Button'
 import styles from './ContactData.css'
-import axios from '../../../axios-orders'
 import Spinner from '../../../components/UI/Spinner/Spinner'
 import Input from '../../../components/UI/Input/Input'
+import { createOrder } from '../../../store/actions/index'
 
 class ContactData extends Component {
   state = {
@@ -79,14 +79,13 @@ class ContactData extends Component {
           ],
           id: 'delivery'
         },
-        value: '',
+        value: 'fastest',
         label: 'Delivery Method',
         validation: {},
         valid: true
       },
     },
     ingredients: null,
-    isLoading: false,
     formIsValid: false
   }
 
@@ -119,29 +118,16 @@ class ContactData extends Component {
     event.preventDefault()
     const { orderForm, formIsValid } = this.state;
     if(!formIsValid) {
-      alert('errors!!!')
       return false
     }
-    this.setState({isLoading: true})
-    const { ingredients, price, history } = this.props;
+    const { ingredients, price } = this.props;
     const customer = this.extractFormData(orderForm)
      const order = {
       ingredients,
       price,
       customer
     }
-    axios.post('/orders.json', order)
-    .then(res => {
-      if (res.data.name) {
-        this.setState({isLoading: false});
-        alert('order created successfully');
-        history.push('/')
-      }
-    })
-    .catch(err => {
-      this.setState({ isLoading: false});
-
-    });
+    this.props.createOrder(order)
   }
   extractFormData = (data) => {
     let formData = {}
@@ -151,7 +137,7 @@ class ContactData extends Component {
     return formData;
   }
   render() {
-    const { isLoading, orderForm, formIsValid } = this.state
+    const { orderForm, formIsValid } = this.state
     let formElementArr = [];
     for (let key in orderForm) {
       formElementArr.push({
@@ -161,7 +147,7 @@ class ContactData extends Component {
     }
     return  (
       <div className={styles.ContactData}>
-        { isLoading ? <Spinner /> : ''}
+        { this.props.isLoading ? <Spinner /> : ''}
         <h4>Enter your conatct Data</h4>
         <form onSubmit={this.orderHandler}>
           { formElementArr.map(element => {
@@ -187,8 +173,11 @@ class ContactData extends Component {
 }
 const mapStateToProps = state => {
   return {
-    ingredients: state.ingredients,
-    price: state.totalPrice
+    ingredients: state.burgerBuilderReducer.ingredients,
+    price: state.burgerBuilderReducer.totalPrice,
+    isLoading: state.orderReducer.isLoading,
+    error: state.orderReducer.error,
+    purchased: state.orderReducer.purchased
   }
 }
-export default connect(mapStateToProps)(ContactData)
+export default connect(mapStateToProps, {createOrder})(ContactData)
