@@ -1,0 +1,27 @@
+.Alert {
+  padding: 20px;
+  color: white !important;
+}
+
+.Alert .ClosebBtn {
+  margin-left: 15px !important;
+  color: white;
+  font-weight: bold;
+  float: right !important;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer !important;
+  transition: 0.3s;
+}
+
+.Alert .CloseBtn:hover {
+  color: black;
+}
+
+.Success {
+  background-color: green;
+}
+
+.Danger {
+  background-color: #f44367;
+}

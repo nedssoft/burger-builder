@@ -5,7 +5,7 @@ import classes from './SideDrawer.css'
 import Backdrop from '../../UI/Backdrop/Backdrop'
 import Aux from '../../../hoc/Aux'
 
-function SideDrawer({ open, closed }) {
+function SideDrawer({ open, closed, isAuth }) {
   const attchedClasses = open ? [classes.SideDrawer, classes.Open] : [classes.SideDrawer, classes.Close];
   return (
     <Aux>
@@ -13,7 +13,7 @@ function SideDrawer({ open, closed }) {
       <div className={attchedClasses.join(' ')}>
         <Logo height="11%" />
         <nav className={classes.Nav}>
-          <NavigationItems />
+          <NavigationItems isAuth={isAuth} />
         </nav>
       </div>
     </Aux>

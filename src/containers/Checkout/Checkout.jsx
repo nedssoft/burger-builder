@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
+import axios from 'axios'
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import Aux from '../../hoc/Aux'
 import ContactData from './ContactData/ContactData'
+import withErrorHandler from '../../hoc/WithErrorHandler/WithErrorHandler'
 
 
 class Checkout extends Component {
@@ -51,4 +53,4 @@ const mapStateToProps = state => {
     purchased: state.orderReducer.purchased
   }
 }
-export default connect(mapStateToProps)(Checkout)
+export default connect(mapStateToProps)(withErrorHandler(Checkout, axios))

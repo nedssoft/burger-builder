@@ -35,3 +35,7 @@
   border: 1px solid red;
   background-color: salmon;
 }
+
+.Valid {
+  border: 1px solid rgb(106, 161, 106)
+}

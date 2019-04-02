@@ -21,6 +21,9 @@ const Input = (props) => {
   if (!valid && shouldValidate && touched) {
     inputClasses.push(styles.Invalid)
   }
+  if (valid) {
+    inputClasses.push(styles.Valid)
+  }
   switch (elementType) {
     case 'input':
       inputElement = (

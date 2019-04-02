@@ -41,6 +41,7 @@
       "react/jsx-one-expression-per-line":"off",
       "react/button-has-type":"off",
       "react/destructuring-assignment":"off",
-      "import/prefer-default-export":"off"
+      "import/prefer-default-export":"off",
+      "no-useless-escape":"off"
     }
 }

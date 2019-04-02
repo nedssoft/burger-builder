@@ -127,7 +127,8 @@ class ContactData extends Component {
       price,
       customer
     }
-    this.props.createOrder(order)
+    const token = this.props.token || localStorage.getItem('token')
+    this.props.createOrder(order, token)
   }
   extractFormData = (data) => {
     let formData = {}
@@ -177,7 +178,8 @@ const mapStateToProps = state => {
     price: state.burgerBuilderReducer.totalPrice,
     isLoading: state.orderReducer.isLoading,
     error: state.orderReducer.error,
-    purchased: state.orderReducer.purchased
+    purchased: state.orderReducer.purchased,
+    token: state.authReducer.token
   }
 }
 export default connect(mapStateToProps, {createOrder})(ContactData)
